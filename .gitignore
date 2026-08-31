@@ -1,0 +1,26 @@
+# Local-only files. Nothing here belongs in a site repo, and the first entry
+# must never reach one: .dev.vars is where Cloudflare Pages reads secrets from
+# while you develop, so it is where VIDEO_API_KEY sits on your machine. Commit
+# it once and the key is in the repo's history - deleting the file afterwards
+# does not remove it, and the only real fix is to rotate the key.
+.dev.vars
+.env
+.env.*
+
+# Cloudflare Wrangler's local state and cache.
+.wrangler/
+
+# Installed packages - reinstall them instead of committing them.
+node_modules/
+
+# Editor and operating-system clutter.
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# NOTE: public/ is deliberately NOT ignored, even though it is a build output.
+# Cloudflare Pages deploys straight from what is committed, so an ignored
+# public/ would publish an empty site. Commit it like any other source.

@@ -1,0 +1,14 @@
+# Every URL under these paths carries a ?v=<content-hash> stamp written by
+# src/assets.js, so a given URL's bytes never change. Safe to cache forever.
+# Cloudflare Pages' default for these is max-age=14400, which costs returning
+# visitors a revalidation round-trip on the render-blocking stylesheet.
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+
+# HTML is deliberately absent: Pages already serves it max-age=0,
+# must-revalidate, which is what makes a new deploy's asset URLs visible
+# immediately. Do not add a rule that caches HTML.
