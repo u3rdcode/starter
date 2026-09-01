@@ -33,15 +33,20 @@
     { key: "wav", label: "Lossless", ext: "WAV" }
   ];
 
-  /* Two separate ad networks, one per interaction - the same split the site
-     used before. PRIMARY opens on the widget's first action (currently the
-     Start button), SECONDARY on its second (currently a Download button).
-     Named by order rather than by button label: a site reusing this widget can
-     relabel its buttons, and a name tied to a label would then be a lie.
-     Each fires on its own click, so both are user-gesture initiated and
-     survive popup blockers that would refuse an unprompted window. */
-  var PRIMARY_AD_URL = "https://fluffyinfection.com/wt7i6w47y?key=a0b11703a8eee9ccfb12352d5f4a5ea0";
-  var SECONDARY_AD_URL = "https://omg10.com/4/10636882";
+  /* Two ad slots, one per interaction. PRIMARY opens on the widget's first
+     action (currently the Start button); SECONDARY is handed to the provider's
+     card as its adUrl. Named by order rather than by button label: a site
+     reusing this widget can relabel its buttons, and a name tied to a label
+     would then be a lie. Each fires on its own click, so both are user-gesture
+     initiated and survive popup blockers that would refuse an unprompted
+     window.
+
+     EMPTY ON PURPOSE. Set these per site to that site's OWN ad URLs, or leave
+     them empty to run no ads at all: openAd() ignores an empty value and the
+     card is then requested without adUrl. Never carry another site's publisher
+     key here - that pays the wrong account. */
+  var PRIMARY_AD_URL = "";
+  var SECONDARY_AD_URL = "";
 
   /* Measured, not guessed: at 3000 the indicator still cleared about 1-1.5s
      before the browser began saving. 4500 covered that; raised to a flat 5000
@@ -396,7 +401,9 @@
        makes this a clean test of whether adUrl is honoured at all. */
     frame.src =
       "https://p.savenow.to/api/card2/?url=" + encodeURIComponent(url) +
-      "&adUrl=" + encodeURIComponent(SECONDARY_AD_URL) + "&ads=1" +
+      (SECONDARY_AD_URL
+        ? "&adUrl=" + encodeURIComponent(SECONDARY_AD_URL) + "&ads=1"
+        : "") +
       /* Loaded INSIDE their iframe, so it only ever touches their classes and
          has no dependency on this site's stylesheet. Built from location.origin
          so it needs no per-site edit. The ?v= stamp below is written into
@@ -416,8 +423,8 @@
     var col = el("div", "dl-mediacol");
     var frame = el("div", "dl-media");
 
-    /* Pornhub returns neither a title nor a thumbnail to either our scraper or
-       the upstream API, so the empty state is the normal case, not the edge. */
+    /* Some sites return neither a title nor a thumbnail to either our scraper
+       or the upstream API, so the empty state is normal, not an edge case. */
     if (thumb) {
       var img = document.createElement("img");
       img.className = "dl-thumb";
@@ -806,7 +813,7 @@
       section.appendChild(mount);
     }
 
-    /* Skeleton first, exactly as the FapHouse page does. The minimum hold is
+    /* Skeleton first. The minimum hold is
        not padding for its own sake: without it a cached metadata reply makes
        the placeholder flash for 80ms, which reads as a glitch. */
     mount.textContent = "";

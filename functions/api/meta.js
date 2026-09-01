@@ -17,17 +17,18 @@
 // Display names only - never used for validation, so there is no list to keep
 // up to date. Anything not here falls back to its own domain name.
 const LABELS = {
-  "faphouse.com": "FapHouse",
-  "thisvid.com": "ThisVid",
-  "pornhub.com": "Pornhub",
-  "xhamster.com": "xHamster",
-  "xvideos.com": "XVideos",
-  "xnxx.com": "XNXX",
-  "youporn.com": "YouPorn",
-  "redtube.com": "RedTube",
-  "spankbang.com": "SpankBang",
-  "eporner.com": "EPorner",
-  "tube8.com": "Tube8",
+  "youtube.com": "YouTube",
+  "youtu.be": "YouTube",
+  "vimeo.com": "Vimeo",
+  "dailymotion.com": "Dailymotion",
+  "facebook.com": "Facebook",
+  "instagram.com": "Instagram",
+  "tiktok.com": "TikTok",
+  "twitter.com": "X",
+  "x.com": "X",
+  "twitch.tv": "Twitch",
+  "reddit.com": "Reddit",
+  "soundcloud.com": "SoundCloud",
 };
 
 // Hostnames that must never be fetched: these are how an open proxy gets used

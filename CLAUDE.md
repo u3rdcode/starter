@@ -55,6 +55,57 @@ site-specific: no `.youtube-btn`, no `.mysite-header`.
   are staged (`.dev.vars` must never be committed) and that
   `node src/assets.js --check` passes.
 
+## The two download paths
+
+The provider is **video-download-api.com** - that is where the docs live and
+where the account and API key come from. It offers several products; this kit
+uses exactly two of them, and the widget moves between them by itself.
+
+**1. The REST API (paid).** Our own Worker endpoints in `functions/api/` wrap it
+so the key never reaches a browser:
+
+- `download.js` submits a job -> `{ok:true,id}`. **The only thing that spends
+  credit**, and only when a visitor picks a format.
+- `progress.js` polls that id -> `progress` 0-1000, `state`, and a `url` when
+  `Finished`. Free.
+- `meta.js` reads Open Graph tags for title and thumbnail. Free, no key.
+
+Upstream host is `p.savenow.to`; finished files come from rotating
+`*.savenow.to` subdomains, which is why `progress.js` allows that whole domain.
+
+**2. The free widget (no key, no cost).** The provider's own card, in a
+cross-origin iframe. This is the fallback: whenever the REST path cannot
+deliver - no credit, upstream down, job rejected, polling timed out - the widget
+reveals this instead, so a visitor always ends up with a working download.
+
+The provider documents it as:
+
+    <iframe id="cardApiIframe" scrolling="no" width="100%" height="100%"
+      allowtransparency="true" style="border: none"
+      src="https://p.savenow.to/api/card2/?url=<VIDEO_URL>&adUrl=<YOUR_AD_URL>&ads=1">
+    </iframe>
+    <!-- library goes in <head> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.9/iframeResizer.min.js"></script>
+    <script> iFrameResize({ log: false }, "#cardApiIframe") </script>
+
+Parameters: `url` the video to download; `adUrl` your publisher ad URL;
+`ads` 1 for one redirect (70% provider / 30% you) or 2 for two (50/50, the
+default); `css` a URL to your own stylesheet for the card.
+
+**This kit wires it differently - do not paste the snippet above.** The iframe
+id here is `#dl-frame`, not `cardApiIframe`; `src/app.js` builds the card2 URL
+itself, passes `css=` pointing at `/css/widget.min.css`, and calls
+`iFrameResize` on the frame directly. Only the library tag belongs in `<head>`.
+
+`PRIMARY_AD_URL` and `SECONDARY_AD_URL` at the top of `src/app.js` are empty on
+purpose. Set them per site, or leave them empty to run no ads. Never put another
+site's publisher key there.
+
+Editing `src/app.js` means rebuilding, or the gate fails:
+
+    npx terser src/app.js --compress --mangle --format comments=false -o public/js/app.min.js
+    node src/assets.js
+
 ## Debugging a deployed site
 
 Failures here are silent by design, so "it looks fine" is not evidence. To test
