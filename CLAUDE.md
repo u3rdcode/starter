@@ -43,23 +43,28 @@ site-specific: no `.youtube-btn`, no `.mysite-header`.
 
 ## Skeletons must match what they replace
 
-Both widgets have a loading skeleton, and each one exists to hold the exact
-footprint of the card that replaces it. Change a card and you MUST change its
-skeleton in the same edit - same widths, paddings, gaps, control heights and
-breakpoints. A skeleton that is even slightly off makes the layout jump when the
-real card swaps in, which is the one thing it exists to prevent.
+Each widget has a loading skeleton whose only job is to reserve the footprint of
+the card that replaces it. Change a card and change its skeleton in the SAME
+edit, or the layout jumps when the real card swaps in - the one thing a skeleton
+exists to prevent, and it fails silently.
 
-- REST card -> `.dl-sk-*` (built in `renderSkeleton`); mirror `.dl-th`, `.dl-td`,
-  the 8.5rem action column and the `--surface` header band.
-- Free card -> `.dl-fsk-*` (built in `makeSkeleton`); mirror `widget.min.css`:
-  `1.125rem` padding and gap, 240px thumb with a 150px floor, 46px select and
-  button, and the 560px/520px `@container` breakpoints.
+- REST card -> `.dl-sk-*`, built in `renderSkeleton`
+- Free card -> `.dl-fsk-*`, built in `makeSkeleton`, mirroring `widget.min.css`
 
-Verify by computing both heights, not by eye. Both currently land on 175.8px of
-content. Note the free card lives in a cross-origin iframe whose `box-sizing` we
-do not control, so any sized control there declares `box-sizing:border-box`
-itself - otherwise a bordered control silently renders 2px taller than a
-borderless one beside it.
+Match the TOTAL height of each row or block, not each individual bar. Bar
+heights can be uniform; push the difference into padding or margins. Derive the
+numbers from the card's own CSS at the time you edit - never from a value
+written down elsewhere, including here - and check every breakpoint the card
+has, since each widget restyles at its own widths.
+
+Radii follow the same split: a bar standing in for a real control copies that
+control's radius; a bar standing in for text has nothing to copy, so it is a
+free choice.
+
+The free card sits in a cross-origin iframe whose `box-sizing` we do not
+control, so any sized control there must declare `box-sizing:border-box` itself.
+Otherwise a bordered control silently renders taller than a borderless one
+beside it.
 
 ## Working preferences
 
