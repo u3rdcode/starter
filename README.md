@@ -48,12 +48,13 @@ it is compiled into a Worker rather than served as files.
    `public`. That single setting is what keeps the rest private.
 3. Set `VIDEO_API_KEY` in that project. Only `download.js` uses it. If you
    also put it in a local `.dev.vars`, note that `.gitignore` already keeps
-   that file out of the repo - leave it that way.
+   that file out of the repo - leave it that way. Adding the key does nothing
+   until you REDEPLOY: Cloudflare only reads it when a build runs.
 4. Replace every `YourSite` and `example.com` placeholder.
 5. Write the copy in `public/index.html`, then design the four side pages.
 6. Recolour (below).
 7. `node src/assets.js` - stamps the asset URLs so they cache safely.
-8. Create the rate-limiting rule once the domain is attached (below).
+8. Attach the domain, then create the rate-limiting rule - see Security.
 
 ## What you must not change
 
@@ -96,46 +97,157 @@ Two rules learned the expensive way:
   darker looks correct on a desktop and is invisible on a phone, which crushes
   small lightness differences. Translucent black self-adjusts to any accent.
 
-## Rate limiting - the one protection that is not in this repo
+## Security
 
-`/api/download` is the only endpoint that spends money, and the
-`isSameOrigin` check in front of it is deliberately a speed bump, not a
-lock: it reads `sec-fetch-site` and falls back to matching `referer`, both
-of which a caller can set by hand. Anyone who forges one header can spend
-your credit. The real protection is a Cloudflare rate-limiting rule, and it
-lives in the dashboard rather than in any file here - so a fresh copy of
-this kit starts with NO abuse protection at all. Nothing in the code will
-tell you it is missing.
+Written for a reader who does not code. If you are setting up a new site and
+remember nothing else, read this section.
 
-The rule below is the one running on the live site. Recreate it exactly:
+There are two kinds of protection on these sites, and the difference is the
+whole point of this section:
 
-    Security rules -> Rate limiting rules -> Create rule
+- **The locks in the code.** Copied automatically. You get them for free and
+  cannot forget them.
+- **The guard in Cloudflare.** NOT copied. You hire him again for every new
+  site, by hand, or the site has no guard at all.
 
-    Rule name          Download Limit
-    When incoming requests match
-      Field            URI Path
-      Operator         equals
-      Value            /api/download
-      Expression       (http.request.uri.path eq "/api/download")
-    With the same characteristics
-      Characteristic   IP
-    When rate exceeds
-      Requests         30
-      Period           10 seconds
-    Then take action
-      Action           Block
-      Duration         10 seconds
-    Execution order    First
-    Status             Active
+Nothing warns you when the guard is missing. The site looks perfectly normal.
 
-Available on the free plan. Turnstile is the documented escalation if
-abuse appears despite the rule; neither site wires it in today.
+### Part 1 - what you already have, automatically
 
-**This needs a custom domain.** Rate-limiting rules are zone-level, and a
-`*.pages.dev` subdomain is not a zone you control - so on a test
-deployment there is nowhere to put the rule, and the endpoint is
-unprotected. That is tolerable while the URL is unlisted and short-lived.
-Attach the domain, then create the rule before announcing the site.
+Every copy of this kit carries these. No setup, no settings, nothing to switch
+on. Listed so you know what you do NOT need to worry about:
+
+- **Your API key never reaches the visitor's browser.** It is used only on the
+  server. Nobody can open the page, look at the code, and steal it.
+- **Only your own site can call the API.** A stranger pasting your API address
+  into their own website gets refused.
+- **Only 6 formats are sellable** (mp3, wav, 360, 480, 720, 1080). Nobody can
+  ask for 4K and charge you the higher rate, because the server refuses any
+  format not on the list.
+- **Videos over 3 hours are refused.** Long videos bill at a multiplied rate,
+  so this stops one giant file costing many times the normal price.
+- **Requests give up after 20 seconds** instead of hanging.
+- **Error messages are cleaned before display.** If the upstream ever echoes
+  your key back in an error, it is blanked out before anyone can see it.
+- **When anything fails, the visitor still gets their download** through the
+  free widget. Your site never shows a broken page.
+
+One thing this list does NOT include: a limit on how MANY times someone can
+call your paid API. That is Part 2, and it is the one that costs money.
+
+### Part 2 - what you must set up by hand, in order
+
+**Before the site is public** (nobody knows the address yet, so there is no
+rush, but do not skip):
+
+1. Deploy the site from its own private repo.
+2. Set `VIDEO_API_KEY` in Cloudflare. **Adding it does nothing until you
+   redeploy** - Cloudflare only reads it when a build runs. Add the key, then
+   redeploy, or you will spend an hour thinking the code is broken.
+3. Test that a download actually completes.
+
+**Then, and only then, attach your domain:**
+
+4. Add the custom domain (example.com) to Cloudflare.
+
+**Immediately after the domain is attached - this is the important one:**
+
+5. **Create the rate-limiting rule.** This is the guard. It cannot be created
+   before step 4, because Cloudflare attaches these rules to a domain, and a
+   free `*.pages.dev` address is not a domain you own.
+
+       Security rules -> Rate limiting rules -> Create rule
+
+       Rule name          Download Limit
+       When incoming requests match
+         Field            URI Path
+         Operator         equals
+         Value            /api/download
+         Expression       (http.request.uri.path eq "/api/download")
+       With the same characteristics
+         Characteristic   IP
+       When rate exceeds
+         Requests         30
+         Period           10 seconds
+       Then take action
+         Action           Block
+         Duration         10 seconds
+       Execution order    First
+       Status             Active
+
+   Works on the free Cloudflare plan.
+
+6. Only now announce the site, share the link, or submit it anywhere.
+
+**Why 30 requests per 10 seconds, and not per hour.** No real person clicks 30
+times in 10 seconds, so a genuine visitor never notices this rule exists. A
+script hammering your API hits it within seconds. If you set it to 30 per HOUR
+instead, you would block real customers - somebody downloading several files,
+or a whole office or college sharing one internet connection. Keep the short
+window. It catches robots and ignores humans.
+
+**What someone attacking you actually experiences.** Their first 30 requests in
+10 seconds go through and do cost you money. Request 31 is blocked by
+Cloudflare before it ever reaches your code, so it costs you nothing. Their
+screen quietly falls back to the free widget. They are blocked for 10 seconds,
+then it repeats. The most they can drain is a slow trickle, never a flood - and
+during all of it your site keeps working normally for everyone else.
+
+### Part 3 - if you think you are being attacked
+
+Signs worth taking seriously: your API credit dropping much faster than your
+visitor numbers explain, or Cloudflare showing a spike in blocked requests.
+
+**Where to look first:** Cloudflare dashboard -> your domain -> Security ->
+Events. This shows what was blocked, from which countries, and how often. Look
+before you change anything, so you know whether it is really an attack or just
+a busy day.
+
+Then work down this list, in order, stopping as soon as it calms down:
+
+1. **Check the money first.** Log in to the video API account and look at the
+   balance and usage. This tells you whether real damage happened or the rule
+   already absorbed it. If nothing was spent, the guard did its job - you may
+   need to do nothing at all.
+
+2. **Tighten the rule.** Edit the same rule: lower 30 to 10, or raise the block
+   duration from 10 seconds to 60. Reversible in seconds, and enough for most
+   trouble.
+
+3. **If it comes from a few places, block them.** Security Events shows the
+   countries and networks. If it is concentrated, add a rule blocking that
+   country or IP range. Do not do this if the traffic is spread worldwide.
+
+4. **Turn on Turnstile** (Cloudflare's "prove you are human" check) if the
+   attack is spread across many addresses, so the rate limit alone cannot see
+   it. This is the documented next step and is not wired into the site today -
+   it is a change to make when actually needed, not in advance.
+
+5. **"Under Attack" mode** is the emergency brake. Overview -> Under Attack
+   Mode. It challenges every visitor, which is unpleasant for real customers,
+   so use it only briefly while you fix the real cause.
+
+6. **If you suspect the key itself leaked, rotate it.** Get a new key from the
+   video API provider, put the new one in Cloudflare, redeploy. The old key
+   stops working. Do this immediately if you ever accidentally committed
+   `.dev.vars` to a repo - deleting the file afterwards does NOT remove the key
+   from the repo's history, and rotating is the only real fix.
+
+**The reassuring part:** while any of this is happening, visitors still get
+their downloads through the free widget. You are never choosing between
+"protect the site" and "keep it working."
+
+### Part 4 - the one-minute checklist
+
+Print this. Before announcing any new site:
+
+    [ ] VIDEO_API_KEY set in Cloudflare
+    [ ] Redeployed AFTER adding the key
+    [ ] A real download tested and completed
+    [ ] Custom domain attached
+    [ ] Rate-limiting rule created and Active
+    [ ] .dev.vars never committed (check .gitignore is intact)
+    [ ] Repo is PRIVATE
 
 ## Costs
 
