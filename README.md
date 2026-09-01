@@ -31,6 +31,7 @@ public/               THE DEPLOY DIRECTORY - nothing else is published
 src/                  app.js  assets.js - sources, never deployed
 functions/api/        download.js  meta.js  progress.js - the Worker
 .gitignore            keeps .dev.vars and friends out of the repo
+CLAUDE.md             naming rules, read automatically by Claude Code
 README.md
 ```
 
@@ -66,6 +67,17 @@ simply does nothing, which is much harder to notice.
 | Colours, fonts, layout | `#dl-output` `#dl-frame` `#dl-frame-skeleton` |
 | Page structure around the widget | Anything starting `dl-`, and the provider's own classes inside the card |
 | The four side pages | `src/app.js` |
+
+Note that 44 `dl-` classes live only in `style.min.css` - `src/app.js` creates
+them at runtime, so they are absent from the HTML and renaming one there breaks
+the card's styling silently.
+
+Anything you ADD later - nav, buttons, a language switcher - should take a
+universal role name (`.nav-link`, `.lang-switch`), never a site-specific one
+(`.youtube-btn`). That is what keeps this kit reusable.
+
+`CLAUDE.md` carries these as rules for AI tools and is read automatically by
+Claude Code, so a session starts already knowing what it must not rename.
 
 Every page that shows the widget must also keep this tag in its `<head>`:
 
