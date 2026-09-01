@@ -43,6 +43,18 @@ site-specific: no `.youtube-btn`, no `.mysite-header`.
   `progress.js` are free.
 - Ask before committing or pushing.
 
+## Working preferences
+
+- **Commit subjects: 5 words maximum.** Standard trailers below the subject
+  (`Co-Authored-By:`) are fine and do not count toward it.
+- **Push straight to `main`**, which is the Cloudflare Pages production branch.
+  Do not create preview branches or preview deployments out of caution: a site
+  being tested has no custom domain attached, so a production deploy is a
+  `*.pages.dev` URL only the owner is looking at, and breaking it costs nothing.
+- That is not licence to skip the checks. Before every push, confirm no secrets
+  are staged (`.dev.vars` must never be committed) and that
+  `node src/assets.js --check` passes.
+
 ## Debugging a deployed site
 
 Failures here are silent by design, so "it looks fine" is not evidence. To test
