@@ -73,6 +73,36 @@ so the key never reaches a browser:
 Upstream host is `p.savenow.to`; finished files come from rotating
 `*.savenow.to` subdomains, which is why `progress.js` allows that whole domain.
 
+What our Workers actually send upstream - the docs are at
+video-download-api.com, but this is the call as it runs in production:
+
+    GET https://p.savenow.to/ajax/download.php
+        ?url=<video url>
+        &format=<mp3|wav|360|480|720|1080>
+        &max_duration=180        minutes; refuses longer rather than paying
+                                 the extended-duration multiplier
+        &audio_quality=320       mp3 only; bitrate does NOT change the price
+        &apikey=<VIDEO_API_KEY>  query param, never a header - which is exactly
+                                 why this call must stay server-side
+    -> {"success":true,"id":"v2_stream_..."}
+    -> on refusal: success not true, plus an `error` string (this is also what
+       running out of credit looks like)
+
+    GET https://p.savenow.to/api/progress?id=<id>        no key, free
+    -> {"progress":0-1000,"text":"Finished","download_url":"https://..."}
+       `text` matching /fail|error/i means the job ran and could not do that
+       link. Progress is NOT monotonic - it can report 10, then 21, then 0 -
+       so watch only for completion, never render a percentage.
+
+The upstream reply also carries a base64 `content` blob (their own pre-rendered
+card) and a marketing `message`. Both are dropped rather than shipped to every
+visitor - the widget takes its title and thumbnail from `/api/meta` instead.
+
+Costs, verified: mp3, wav, 360-1080 are all 4 units / $0.00020. 1440p
+($0.00030) and 4K ($0.00035) are excluded on purpose - we do not advertise what
+we do not serve. m4a would be cheaper at 3 units but is deliberately not
+offered. Only format selection bills; rendering a card is free.
+
 **2. The free widget (no key, no cost).** The provider's own card, in a
 cross-origin iframe. This is the fallback: whenever the REST path cannot
 deliver - no credit, upstream down, job rejected, polling timed out - the widget
