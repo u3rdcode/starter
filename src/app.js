@@ -421,7 +421,7 @@
          browser sees always matches the bytes on disk. That is why /css/*'s
          year-long immutable rule is as safe here as for any other asset:
          change the CSS, change the URL. Never hand-edit the stamp. */
-      "&css=" + encodeURIComponent(location.origin + "/css/widget.min.css?v=3689f1a4");
+      "&css=" + encodeURIComponent(location.origin + "/css/widget.min.css?v=955ada6b");
     section.style.display = "block";
     revealResult();
   }

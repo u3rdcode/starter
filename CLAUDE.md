@@ -39,6 +39,11 @@ site-specific: no `.youtube-btn`, no `.mysite-header`.
 - Every page showing the widget needs the iframe-resizer script in `<head>`,
   or the card renders cropped at 200px with nothing in the console.
 - `node src/assets.js --check` must pass before any deploy.
+- **Light theme only, deliberately.** There is no dark mode here and none is
+  wanted by default: no `prefers-color-scheme`, no `data-theme`, no second
+  palette, no toggle. Do NOT add any of it as an improvement or for future use.
+  If dark mode is ever needed it will be asked for explicitly and built then.
+  Colours live in one `:root` block; a new site repaints those tokens.
 - Ask before committing or pushing.
 
 ## Skeletons must match what they replace
