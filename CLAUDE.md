@@ -41,6 +41,26 @@ site-specific: no `.youtube-btn`, no `.mysite-header`.
 - `node src/assets.js --check` must pass before any deploy.
 - Ask before committing or pushing.
 
+## Skeletons must match what they replace
+
+Both widgets have a loading skeleton, and each one exists to hold the exact
+footprint of the card that replaces it. Change a card and you MUST change its
+skeleton in the same edit - same widths, paddings, gaps, control heights and
+breakpoints. A skeleton that is even slightly off makes the layout jump when the
+real card swaps in, which is the one thing it exists to prevent.
+
+- REST card -> `.dl-sk-*` (built in `renderSkeleton`); mirror `.dl-th`, `.dl-td`,
+  the 8.5rem action column and the `--surface` header band.
+- Free card -> `.dl-fsk-*` (built in `makeSkeleton`); mirror `widget.min.css`:
+  `1.125rem` padding and gap, 240px thumb with a 150px floor, 46px select and
+  button, and the 560px/520px `@container` breakpoints.
+
+Verify by computing both heights, not by eye. Both currently land on 175.8px of
+content. Note the free card lives in a cross-origin iframe whose `box-sizing` we
+do not control, so any sized control there declares `box-sizing:border-box`
+itself - otherwise a bordered control silently renders 2px taller than a
+borderless one beside it.
+
 ## Working preferences
 
 - **Commit subjects: 5 words maximum.** Standard trailers below the subject
