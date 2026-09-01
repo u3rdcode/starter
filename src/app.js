@@ -259,13 +259,15 @@
     return v || fallback;
   }
 
-  function setNote(msg) {
+  function setNote(msg, warn) {
     if (!noteEl) return;
     var before = noteEl.offsetHeight;          // 0 while hidden
     /* Captured BEFORE the change, because a hidden element reports zeros and
        we would lose the answer for the disappearing case. */
     var wasAbove = before > 0 && noteEl.getBoundingClientRect().top < 0;
     noteEl.textContent = msg || "";
+    /* A failed link is a warning; the "preparing your file" note is not. */
+    noteEl.className = "dl-note" + (warn ? " dl-note-warn" : "");
     noteEl.style.display = msg ? "" : "none";
     var grew = noteEl.offsetHeight - before;
     /* The note sits above the format table, so revealing it pushes everything
@@ -605,7 +607,7 @@
              widget is a genuine second chance. Those still fall back. */
           if (isLinkProblem(reason)) {
             if (log) console.warn("[downloader] unsupported:", reason);
-            setNote(noteText("unsupported", "This link is not supported. Please try a different video link."));
+            setNote(noteText("unsupported", "This link is not supported. Please try a different video link."), true);
             setIdle();
             return;
           }
