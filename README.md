@@ -53,6 +53,7 @@ it is compiled into a Worker rather than served as files.
 5. Write the copy in `public/index.html`, then design the four side pages.
 6. Recolour (below).
 7. `node src/assets.js` - stamps the asset URLs so they cache safely.
+8. Create the rate-limiting rule once the domain is attached (below).
 
 ## What you must not change
 
@@ -94,6 +95,47 @@ Two rules learned the expensive way:
 - **The progress fill stays `rgba(0,0,0,.25)`.** A second brand hex one shade
   darker looks correct on a desktop and is invisible on a phone, which crushes
   small lightness differences. Translucent black self-adjusts to any accent.
+
+## Rate limiting - the one protection that is not in this repo
+
+`/api/download` is the only endpoint that spends money, and the
+`isSameOrigin` check in front of it is deliberately a speed bump, not a
+lock: it reads `sec-fetch-site` and falls back to matching `referer`, both
+of which a caller can set by hand. Anyone who forges one header can spend
+your credit. The real protection is a Cloudflare rate-limiting rule, and it
+lives in the dashboard rather than in any file here - so a fresh copy of
+this kit starts with NO abuse protection at all. Nothing in the code will
+tell you it is missing.
+
+The rule below is the one running on the live site. Recreate it exactly:
+
+    Security rules -> Rate limiting rules -> Create rule
+
+    Rule name          Download Limit
+    When incoming requests match
+      Field            URI Path
+      Operator         equals
+      Value            /api/download
+      Expression       (http.request.uri.path eq "/api/download")
+    With the same characteristics
+      Characteristic   IP
+    When rate exceeds
+      Requests         30
+      Period           10 seconds
+    Then take action
+      Action           Block
+      Duration         10 seconds
+    Execution order    First
+    Status             Active
+
+Available on the free plan. Turnstile is the documented escalation if
+abuse appears despite the rule; neither site wires it in today.
+
+**This needs a custom domain.** Rate-limiting rules are zone-level, and a
+`*.pages.dev` subdomain is not a zone you control - so on a test
+deployment there is nowhere to put the rule, and the endpoint is
+unprotected. That is tolerable while the URL is unlisted and short-lived.
+Attach the domain, then create the rule before announcing the site.
 
 ## Costs
 
