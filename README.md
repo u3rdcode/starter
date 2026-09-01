@@ -69,16 +69,9 @@ simply does nothing, which is much harder to notice.
 | Page structure around the widget | Anything starting `dl-`, and the provider's own classes inside the card |
 | The four side pages | `src/app.js` |
 
-Note that 44 `dl-` classes live only in `style.min.css` - `src/app.js` creates
-them at runtime, so they are absent from the HTML and renaming one there breaks
-the card's styling silently.
-
-Anything you ADD later - nav, buttons, a language switcher - should take a
-universal role name (`.nav-link`, `.lang-switch`), never a site-specific one
-(`.youtube-btn`). That is what keeps this kit reusable.
-
-`CLAUDE.md` carries these as rules for AI tools and is read automatically by
-Claude Code, so a session starts already knowing what it must not rename.
+The full naming rules live in `CLAUDE.md` - which classes exist only in the CSS
+and break silently if renamed, and how to name anything you add later. Claude
+Code reads that file automatically, so a session starts already knowing them.
 
 Every page that shows the widget must also keep this tag in its `<head>`:
 
@@ -153,9 +146,9 @@ call your paid API. That is Part 2, and it is the one that costs money.
 rush, but do not skip):
 
 1. Deploy the site from its own private repo.
-2. Set `VIDEO_API_KEY` in Cloudflare. **Adding it does nothing until you
-   redeploy** - Cloudflare only reads it when a build runs. Add the key, then
-   redeploy, or you will spend an hour thinking the code is broken.
+2. Set `VIDEO_API_KEY` in Cloudflare, then **redeploy**. Adding it alone does
+   nothing (setup step 3), and skipping the redeploy is the single most common
+   way to lose an hour thinking the code is broken.
 3. Test that a download actually completes.
 
 **Then, and only then, attach your domain:**
@@ -266,9 +259,9 @@ Print this. Before announcing any new site:
 
 ## Costs
 
-Only `functions/api/download.js` spends credit, and only when a visitor picks
-a format - rendering a card is free. `meta.js` reads Open Graph tags itself and
-`progress.js` polls; neither touches the paid API.
+Only `functions/api/download.js` spends credit, and only when a visitor picks a
+format - rendering a card is free, and `meta.js` and `progress.js` never touch
+the paid API. Per-format pricing is in `CLAUDE.md`.
 
 ## One repo, one Cloudflare account, one site
 

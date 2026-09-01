@@ -39,8 +39,6 @@ site-specific: no `.youtube-btn`, no `.mysite-header`.
 - Every page showing the widget needs the iframe-resizer script in `<head>`,
   or the card renders cropped at 200px with nothing in the console.
 - `node src/assets.js --check` must pass before any deploy.
-- Only `functions/api/download.js` spends API credit. `meta.js` and
-  `progress.js` are free.
 - Ask before committing or pushing.
 
 ## Working preferences
@@ -74,8 +72,7 @@ so the key never reaches a browser:
 Upstream host is `p.savenow.to`; finished files come from rotating
 `*.savenow.to` subdomains, which is why `progress.js` allows that whole domain.
 
-What our Workers actually send upstream - the docs are at
-video-download-api.com, but this is the call as it runs in production:
+What our Workers actually send upstream, as it runs in production:
 
     GET https://p.savenow.to/ajax/download.php
         ?url=<video url>
