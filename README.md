@@ -210,9 +210,12 @@ Then work down this list, in order, stopping as soon as it calms down:
    already absorbed it. If nothing was spent, the guard did its job - you may
    need to do nothing at all.
 
-2. **Tighten the rule.** Edit the same rule: lower 30 to 10, or raise the block
-   duration from 10 seconds to 60. Reversible in seconds, and enough for most
-   trouble.
+2. **Tighten the rule.** On the free plan both the period and the block
+   duration are fixed at 10 seconds, so the only dial you have is the request
+   count: lower 30 to 10. Do this only during real trouble and put it back
+   afterwards - 30 exists to leave room for shared connections (mobile
+   networks, offices, colleges, VPNs) where many real people share one IP.
+   Reversible in seconds, no redeploy.
 
 3. **If it comes from a few places, block them.** Security Events shows the
    countries and networks. If it is concentrated, add a rule blocking that
