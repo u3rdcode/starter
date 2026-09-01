@@ -94,7 +94,9 @@
   /* Copied verbatim from src/dl.js so both widgets draw identical icons. */
   var ICONS = {
     download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke-width="2.7"></path><polyline points="7 10 12 15 17 10" stroke-width="2.7"></polyline><line x1="12" y1="15" x2="12" y2="3" stroke-width="2.7"></line>',
-    image: '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>',
+    /* Same screen-and-play mark the provider's card uses for a missing
+       thumbnail, so both widgets show one icon rather than two. */
+    video: '<rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke-width="1.8"></rect><path d="M10.2 9.3l4.6 2.7-4.6 2.7z" fill="currentColor" stroke="none"></path>',
     chevron: '<polyline points="4 8 12 16 20 8" stroke-width="2.7"></polyline>'
   };
 
@@ -259,15 +261,13 @@
     return v || fallback;
   }
 
-  function setNote(msg, warn) {
+  function setNote(msg) {
     if (!noteEl) return;
     var before = noteEl.offsetHeight;          // 0 while hidden
     /* Captured BEFORE the change, because a hidden element reports zeros and
        we would lose the answer for the disappearing case. */
     var wasAbove = before > 0 && noteEl.getBoundingClientRect().top < 0;
     noteEl.textContent = msg || "";
-    /* A failed link is a warning; the "preparing your file" note is not. */
-    noteEl.className = "dl-note" + (warn ? " dl-note-warn" : "");
     noteEl.style.display = msg ? "" : "none";
     var grew = noteEl.offsetHeight - before;
     /* The note sits above the format table, so revealing it pushes everything
@@ -444,13 +444,13 @@
       img.referrerPolicy = "no-referrer";
       img.onerror = function () {
         var ph = el("div", "dl-thumb-empty");
-        ph.appendChild(icon("image"));
+        ph.appendChild(icon("video"));
         if (this.replaceWith) this.replaceWith(ph);
       };
       frame.appendChild(img);
     } else {
       var ph2 = el("div", "dl-thumb-empty");
-      ph2.appendChild(icon("image"));
+      ph2.appendChild(icon("video"));
       frame.appendChild(ph2);
     }
     col.appendChild(frame);
@@ -607,7 +607,7 @@
              widget is a genuine second chance. Those still fall back. */
           if (isLinkProblem(reason)) {
             if (log) console.warn("[downloader] unsupported:", reason);
-            setNote(noteText("unsupported", "This link is not supported. Please try a different video link."), true);
+            setNote(noteText("unsupported", "This link is not supported. Please try a different video link."));
             setIdle();
             return;
           }
