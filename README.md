@@ -264,10 +264,3 @@ Each site gets its own private repo and its own Cloudflare account. That is
 deliberate: accounts get suspended, billing fails, a limit gets hit - and when
 that happens it should take down one site, not all of them. The cost is that
 nothing is shared between sites, which is exactly why this kit exists.
-
-## Not included
-
-The 18-language translation pipeline and the language picker that goes with
-it. Both are content machinery tied to one site's copy rather than part of the
-widget. The stylesheet still carries the picker's rules, so adding it later
-does not mean restyling.
