@@ -51,10 +51,12 @@
   var PRIMARY_AD_URL = "";
   var SECONDARY_AD_URL = "";
 
-  /* The provider's card takes its own adUrl, which is a revenue split rather
-     than a popunder, so unlike the two above this one is set by default and is
-     the same across these sites. */
-  var CARD_AD_URL = "https://omg10.com/4/10636882";
+  /* The provider's card takes its own adUrl. Unlike the two popunders above
+     this is a parameter baked into the embed, not a tab that opens - a revenue
+     split rather than a redirect - so it is set by default and is the same
+     across these sites. Named for the mechanism so it stays accurate on a site
+     where the embed is the main path rather than the fallback. */
+  var EMBED_AD_URL = "https://omg10.com/4/10636882";
 
   /* Measured, not guessed: at 3000 the indicator still cleared about 1-1.5s
      before the browser began saving. 4500 covered that; raised to a flat 5000
@@ -403,12 +405,12 @@
     }
 
     /* ads=1 asks for a single redirect instead of the default two, and adUrl
-       claims our 30% share of it. Left out entirely if CARD_AD_URL is blanked,
+       claims our 30% share of it. Left out entirely if EMBED_AD_URL is blanked,
        rather than sent empty. */
     frame.src =
       "https://p.savenow.to/api/card2/?url=" + encodeURIComponent(url) +
-      (CARD_AD_URL
-        ? "&adUrl=" + encodeURIComponent(CARD_AD_URL) + "&ads=1"
+      (EMBED_AD_URL
+        ? "&adUrl=" + encodeURIComponent(EMBED_AD_URL) + "&ads=1"
         : "") +
       /* Loaded INSIDE their iframe, so it only ever touches their classes and
          has no dependency on this site's stylesheet. Built from location.origin
