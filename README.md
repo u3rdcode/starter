@@ -46,7 +46,8 @@ it is compiled into a Worker rather than served as files.
 1. Copy everything in this folder into the new project root, as it is.
 2. In the Cloudflare Pages project, set the build output directory to
    `public`. That single setting is what keeps the rest private.
-3. Set `VIDEO_API_KEY` in that project. Only `download.js` uses it. If you
+3. Set `VIDEO_API_KEY` in that project - the account and key come from the
+   provider, https://video-download-api.com/. Only `download.js` uses it. If you
    also put it in a local `.dev.vars`, note that `.gitignore` already keeps
    that file out of the repo - leave it that way. Adding the key does nothing
    until you REDEPLOY: Cloudflare only reads it when a build runs.

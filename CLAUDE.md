@@ -57,8 +57,9 @@ site-specific: no `.youtube-btn`, no `.mysite-header`.
 
 ## The two download paths
 
-The provider is **video-download-api.com** - that is where the docs live and
-where the account and API key come from. It offers several products; this kit
+**Docs: https://video-download-api.com/** - the provider. Everything about the
+paid API, the account, the API key and the free widget comes from there, so go
+to it before guessing or asking. The provider offers several products; this kit
 uses exactly two of them, and the widget moves between them by itself.
 
 **1. The REST API (paid).** Our own Worker endpoints in `functions/api/` wrap it
