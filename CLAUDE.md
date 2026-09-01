@@ -15,9 +15,9 @@ Names describe **roles**, never labels or content. Relabelling a button from
 - **The six ids** `#dl-url` `#dl-submit` `#dl-clear` `#dl-output` `#dl-frame`
   `#dl-frame-skeleton`, and the two classes `.dl-form` `.dl-frame-wrap`, which
   `src/app.js` looks up directly.
-- **44 `dl-` classes exist only in `style.min.css`** - `src/app.js` builds them
-  at runtime, so they never appear in the HTML. Renaming one in the CSS breaks
-  the card's styling with nothing in the console.
+- **Many `dl-` classes exist only in `style.min.css`** - `src/app.js` builds
+  them at runtime, so they never appear in the HTML. Renaming one in the CSS
+  breaks the card's styling with nothing in the console.
 - **Every class in `public/css/widget.min.css`** - they are the provider's, used
   inside their cross-origin iframe. It also cannot read CSS variables, so it
   carries literal hex.
@@ -25,9 +25,9 @@ Names describe **roles**, never labels or content. Relabelling a button from
 Renaming any of the above does not throw. The widget silently does nothing,
 which is far harder to notice than a crash.
 
-**Page names** - `.container` `.section` `.section-alt` `.hero` `.site-header`
-`.faq-item` `.btn-primary` `#about` `#faq` `#features` and the rest: rename only
-when the user explicitly asks for that rename.
+**Page names** - everything not prefixed `dl-`: the layout, header, footer,
+section and content classes and ids. Rename only when the user explicitly asks
+for that rename, never as tidying.
 
 **Anything you ADD** - nav, buttons, a language switcher, new sections - takes a
 universal role-based name: `.nav-link`, `.lang-switch`, `.cta-button`. Never
@@ -79,9 +79,9 @@ beside it.
   Do not create preview branches or preview deployments out of caution: a site
   being tested has no custom domain attached, so a production deploy is a
   `*.pages.dev` URL only the owner is looking at, and breaking it costs nothing.
-- That is not licence to skip the checks. Before every push, confirm no secrets
-  are staged (`.dev.vars` must never be committed) and that
-  `node src/assets.js --check` passes.
+- That is not licence to skip the checks: before every push confirm no secrets
+  are staged (`.dev.vars` must never be committed) and that the gate above
+  passes.
 
 ## The two download paths
 
@@ -126,10 +126,11 @@ The upstream reply also carries a base64 `content` blob (their own pre-rendered
 card) and a marketing `message`. Both are dropped rather than shipped to every
 visitor - the widget takes its title and thumbnail from `/api/meta` instead.
 
-Costs, verified: mp3, wav, 360-1080 are all 4 units / $0.00020. 1440p
-($0.00030) and 4K ($0.00035) are excluded on purpose - we do not advertise what
-we do not serve. m4a would be cheaper at 3 units but is deliberately not
-offered. Only format selection bills; rendering a card is free.
+Costs as measured against the provider's pricing at the time of writing - check
+the docs before relying on the figures: every format offered bills the same 4
+units. 1440p and 4K cost more and are excluded on purpose, since we do not
+advertise what we do not serve. m4a is cheaper but deliberately not offered.
+Only format selection bills; rendering a card is free.
 
 **2. The free widget (no key, no cost).** The provider's own card, in a
 cross-origin iframe. This is the fallback: whenever the REST path cannot
@@ -190,8 +191,8 @@ served HTML, so the guidance that used to sit there lives here:
   write real answers rather than one-liners. Three items ship by default; add
   more as needed.
 
-Keep  free of comments: everything there is downloadable by any
-visitor. Comments belong in , which is never deployed, or here.
+Keep `public/` free of comments: everything there is downloadable by any
+visitor. Comments belong in `src/`, which is never deployed, or here.
 
 ## Debugging a deployed site
 
