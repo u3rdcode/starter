@@ -144,6 +144,25 @@ Editing `src/app.js` means rebuilding, or the gate fails:
     npx terser src/app.js --compress --mangle --format comments=false -o public/js/app.min.js
     node src/assets.js
 
+## Writing the homepage copy
+
+The homepage ships as numbered placeholders (Feature 1, Question 1, Answer 1,
+"Add the about here"). Replace them per site. No comments are left in the
+served HTML, so the guidance that used to sit there lives here:
+
+- **About** - one or two paragraphs on what the tool does and which sites it
+  supports. Plain and specific: this block carries most of the page's search
+  weight. At least 60 characters; shorter reads as thin.
+- **Features** - six worth covering: supported sites; resolutions offered;
+  formats, video and audio; runs in the browser on phone, tablet and desktop;
+  no account needed; free with no hidden charges.
+- **FAQ** - answer in 3-4 sentences each. Search engines surface these, so
+  write real answers rather than one-liners. Three items ship by default; add
+  more as needed.
+
+Keep  free of comments: everything there is downloadable by any
+visitor. Comments belong in , which is never deployed, or here.
+
 ## Debugging a deployed site
 
 Failures here are silent by design, so "it looks fine" is not evidence. To test
