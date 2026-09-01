@@ -97,9 +97,19 @@ id here is `#dl-frame`, not `cardApiIframe`; `src/app.js` builds the card2 URL
 itself, passes `css=` pointing at `/css/widget.min.css`, and calls
 `iFrameResize` on the frame directly. Only the library tag belongs in `<head>`.
 
-`PRIMARY_AD_URL` and `SECONDARY_AD_URL` at the top of `src/app.js` are empty on
-purpose. Set them per site, or leave them empty to run no ads. Never put another
-site's publisher key there.
+**Ads - three separate slots** at the top of `src/app.js`:
+
+- `PRIMARY_AD_URL` - popunder on the widget's first action (Start).
+- `SECONDARY_AD_URL` - popunder on its second (a Download button).
+- `CARD_AD_URL` - the `adUrl` handed to the provider's card. A revenue split,
+  not a popunder.
+
+The two popunders ship **empty on purpose**, so a fresh site redirects nowhere:
+Start opens no tab and neither does Download. That is the intended default, not
+an oversight - do NOT delete the constants, they exist to be filled in later
+when a slot is turned on. `CARD_AD_URL` is set by default and is the same across
+these sites. Blanking it omits `adUrl` from the card request entirely rather
+than sending it empty.
 
 Editing `src/app.js` means rebuilding, or the gate fails:
 

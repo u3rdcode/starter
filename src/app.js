@@ -33,20 +33,28 @@
     { key: "wav", label: "Lossless", ext: "WAV" }
   ];
 
-  /* Two ad slots, one per interaction. PRIMARY opens on the widget's first
-     action (currently the Start button); SECONDARY is handed to the provider's
-     card as its adUrl. Named by order rather than by button label: a site
-     reusing this widget can relabel its buttons, and a name tied to a label
-     would then be a lie. Each fires on its own click, so both are user-gesture
-     initiated and survive popup blockers that would refuse an unprompted
-     window.
+  /* Three separate ad slots. The two popunders are EMPTY ON PURPOSE and the
+     card ad is not.
 
-     EMPTY ON PURPOSE. Set these per site to that site's OWN ad URLs, or leave
-     them empty to run no ads at all: openAd() ignores an empty value and the
-     card is then requested without adUrl. Never carry another site's publisher
-     key here - that pays the wrong account. */
+     PRIMARY and SECONDARY are popunders opened by openAd() on the widget's own
+     buttons - PRIMARY on the first action (currently Start), SECONDARY on the
+     second (currently a Download button). Named by order rather than by button
+     label: a site reusing this widget can relabel its buttons, and a name tied
+     to a label would then be a lie. Each fires on its own click, so both are
+     user-gesture initiated and survive popup blockers that would refuse an
+     unprompted window.
+
+     Both ship empty, so a fresh site redirects NOWHERE: pasting a link and
+     pressing Start opens no tab, and neither does pressing Download. openAd()
+     ignores an empty value. Fill either or both in later to turn that slot on -
+     they exist for exactly that, so do not delete them. */
   var PRIMARY_AD_URL = "";
   var SECONDARY_AD_URL = "";
+
+  /* The provider's card takes its own adUrl, which is a revenue split rather
+     than a popunder, so unlike the two above this one is set by default and is
+     the same across these sites. */
+  var CARD_AD_URL = "https://omg10.com/4/10636882";
 
   /* Measured, not guessed: at 3000 the indicator still cleared about 1-1.5s
      before the browser began saving. 4500 covered that; raised to a flat 5000
@@ -395,14 +403,12 @@
     }
 
     /* ads=1 asks for a single redirect instead of the default two, and adUrl
-       claims our 30% share of it. Deliberately the SAME url as the currently
-       disabled Download-button ad: with that button silent, any impression
-       appearing on that network can only have come from here, which is what
-       makes this a clean test of whether adUrl is honoured at all. */
+       claims our 30% share of it. Left out entirely if CARD_AD_URL is blanked,
+       rather than sent empty. */
     frame.src =
       "https://p.savenow.to/api/card2/?url=" + encodeURIComponent(url) +
-      (SECONDARY_AD_URL
-        ? "&adUrl=" + encodeURIComponent(SECONDARY_AD_URL) + "&ads=1"
+      (CARD_AD_URL
+        ? "&adUrl=" + encodeURIComponent(CARD_AD_URL) + "&ads=1"
         : "") +
       /* Loaded INSIDE their iframe, so it only ever touches their classes and
          has no dependency on this site's stylesheet. Built from location.origin
