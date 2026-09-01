@@ -378,11 +378,6 @@
     }
     frame.style.display = "none";
 
-    /* >>> TEMPORARY DEBUG - REMOVE BEFORE THIS KIT IS USED FOR A REAL SITE <<<
-       Holds the fallback skeleton on screen so it can be compared against the
-       card it stands in for. Set to 0 to restore normal behaviour. */
-    var DEBUG_SKELETON_HOLD_MS = 120000;
-
     var settled = false;
     function reveal() {
       if (settled) return;
@@ -391,11 +386,11 @@
       if (load) load.style.display = "none";
       frame.style.display = "";
     }
-    frame.onload = function () { setTimeout(reveal, DEBUG_SKELETON_HOLD_MS); };
+    frame.onload = reveal;
     /* Without this, an iframe that never fires load - blocked, offline, their
        host down - leaves the skeleton shimmering forever, which looks frozen.
        Revealing an empty frame is honest; a permanent placeholder is not. */
-    var guard = setTimeout(reveal, 15000 + DEBUG_SKELETON_HOLD_MS);
+    var guard = setTimeout(reveal, 15000);
     /* The iframe is hard-coded to height="200" and the card inside is taller,
        so without iframe-resizer it renders cropped. The v1 script called this
        on page load; nothing does now, so the fallback must do it itself.
