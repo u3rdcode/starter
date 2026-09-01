@@ -21,38 +21,40 @@
 <main>
 
   <section class="hero"><div class="container"><div>
-    <h1>Your Video Downloader Headline</h1>
+    <h1>Video Downloader</h1>
     <div class="dl-form" data-hint-empty="Please provide a link first." data-hint-bad="Oops! That's not a valid link."><div class="dl-form-row"><div class="dl-form-field"><input type="text" id="dl-url" placeholder="Paste video link here" aria-label="Video URL" autocomplete="off" spellcheck="false"/><button id="dl-clear" class="dl-form-clear" aria-label="Clear the input field" style="display: none;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="5" x2="5" y2="19"></line><line x1="5" y1="5" x2="19" y2="19"></line></svg></button></div><button id="dl-submit" class="btn-primary"><span>Start</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button></div></div>
     <div id="dl-output" class="dl-output" style="display:none;margin-top:1.5rem;"><div class="dl-frame-wrap"><div id="dl-frame-skeleton" class="dl-frame-skeleton"></div><iframe id="dl-frame" scrolling="no" width="100%" height="200" allowtransparency="true" style="border: none; display: none;"></iframe></div></div>
   </div></div></section>
 
   <section id="about" class="section section-alt"><div class="container"><div class="about-card">
-    <h2 class="section-title">About Your Site</h2>
-    <p class="about-text">One or two paragraphs saying what the tool does and which sites it supports. Keep it plain and specific - this block carries most of the page's search weight, so it is worth writing properly rather than padding.</p>
+    <!-- One or two paragraphs on what the tool does and which sites it
+         supports. Plain and specific: this block carries most of the
+         page's search weight. At least 60 characters - shorter reads as thin. -->
+    <h2 class="section-title">About</h2>
+    <p class="about-text">Add the about here</p>
   </div></div></section>
 
 
   <section id="features" class="section"><div class="container">
     <h2 class="section-title">Features</h2>
     <div class="features-grid">
-      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div><h3>Multi-Site Support</h3></div><p>Say which sites are supported.</p></div>
-      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div><h3>High-Quality Downloads</h3></div><p>Say which resolutions are offered.</p></div>
-      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg></div><h3>Multi-Format Options</h3></div><p>Say which formats are offered, video and audio.</p></div>
-      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></div><h3>Works on Any Device</h3></div><p>Say that it runs in the browser on phones, tablets and desktops.</p></div>
-      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><h3>No Registration</h3></div><p>Say that no account or sign-up is needed.</p></div>
-      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div><h3>Free to Use</h3></div><p>Say that it is free, with no hidden charges.</p></div>
+      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><h3>Feature 1</h3></div><p>Say which sites are supported.</p></div>
+      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><h3>Feature 2</h3></div><p>Say which resolutions are offered.</p></div>
+      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><h3>Feature 3</h3></div><p>Say which formats are offered, video and audio.</p></div>
+      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><h3>Feature 4</h3></div><p>Say that it runs in the browser on phones, tablets and desktops.</p></div>
+      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><h3>Feature 5</h3></div><p>Say that no account or sign-up is needed.</p></div>
+      <div class="feature-item"><div class="feature-header"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div><h3>Feature 6</h3></div><p>Say that it is free, with no hidden charges.</p></div>
     </div>
   </div></section>
 
   <section id="faq" class="section section-alt"><div class="container">
     <h2 class="section-title">Frequently Asked Questions</h2>
+    <!-- Answer in 3-4 sentences. Search engines show these, so write them as
+         real answers rather than one-liners. Add more items as needed. -->
     <div class="faq-grid">
-      <div class="faq-item"><div><h3>Is it free to use?</h3></div><div class="faq-answer"><p>Answer in 3-4 sentences. Search engines show these, so write them as real answers rather than one-liners.</p></div></div>
-      <div class="faq-item"><div><h3>Does it work on mobile devices?</h3></div><div class="faq-answer"><p>Answer in 3-4 sentences.</p></div></div>
-      <div class="faq-item"><div><h3>Which websites are supported?</h3></div><div class="faq-answer"><p>Answer in 3-4 sentences.</p></div></div>
-      <div class="faq-item"><div><h3>What formats are supported?</h3></div><div class="faq-answer"><p>Answer in 3-4 sentences.</p></div></div>
-      <div class="faq-item"><div><h3>Do I need an account?</h3></div><div class="faq-answer"><p>Answer in 3-4 sentences.</p></div></div>
-      <div class="faq-item"><div><h3>How long does a download take?</h3></div><div class="faq-answer"><p>Answer in 3-4 sentences.</p></div></div>
+      <div class="faq-item"><div><h3>Question 1</h3></div><div class="faq-answer"><p>Answer 1</p></div></div>
+      <div class="faq-item"><div><h3>Question 2</h3></div><div class="faq-answer"><p>Answer 2</p></div></div>
+      <div class="faq-item"><div><h3>Question 3</h3></div><div class="faq-answer"><p>Answer 3</p></div></div>
     </div>
   </div></section>
 
