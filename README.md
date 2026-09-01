@@ -20,16 +20,15 @@ iframe, no extra file, nothing to install.
 
 ```
 public/               THE DEPLOY DIRECTORY - nothing else is published
-  index.html          homepage: header, hero + widget, how-to, features, FAQ
+  index.html          homepage: header, hero + widget, features, FAQ
   contact.html        skeletons - real header and footer, unstyled by design
   privacy.html  terms.html  404.html
   css/style.min.css   the whole homepage: header, hero, sections, footer, widget
   css/widget.min.css  loaded INSIDE the provider's iframe (see Recolouring)
   js/app.min.js       built widget
-  js/ui.min.js        header behaviour (share button)
   _headers            year-long immutable caching for /css/ and /js/
   robots.txt  sitemap.xml
-src/                  app.js  ui.js  assets.js - sources, never deployed
+src/                  app.js  assets.js - sources, never deployed
 functions/api/        download.js  meta.js  progress.js - the Worker
 .gitignore            keeps .dev.vars and friends out of the repo
 README.md
