@@ -307,7 +307,7 @@
     k.innerHTML =
       '<div class="dl-fsk-card"><div class="dl-fsk-thumb"></div><div class="dl-fsk-body">' +
       '<div class="dl-fsk-title"></div><div class="dl-fsk-url"></div>' +
-      '<div class="dl-fsk-label"></div><div class="dl-fsk-field"></div>' +
+      '<div class="dl-fsk-field"></div>' +
       '<div class="dl-fsk-btn"></div></div></div>';
     return k;
   }
