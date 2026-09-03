@@ -1,0 +1,21 @@
+# Check out LF on every platform. Without this, Windows rewrites files to CRLF
+# on checkout, which changes their bytes - and the ?v= stamps in the HTML are
+# sha1 hashes of those bytes. A checkout on a different machine would then
+# recompute every hash, restamp every page, and force all visitors to
+# re-download files that never actually changed.
+#
+# This is not theoretical here. public/css/style.min.css contains a newline, so
+# it really would convert:
+#
+#   as LF    12405 bytes  sha1 2f829250
+#   as CRLF  12406 bytes  sha1 296de5ab
+#
+# Every site copied from this kit inherits the same ?v= scheme, so it inherits
+# the same exposure. Keep this file in the copy.
+* text=auto eol=lf
+
+# Never touch binaries
+*.ico  binary
+*.webp binary
+*.png  binary
+*.jpg  binary

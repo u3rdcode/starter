@@ -1,0 +1,29 @@
+#!/bin/sh
+# Refuses a push when the build is not in a shippable state.
+#
+# The failures this catches are silent - the page looks perfect while something
+# is wrong:
+#
+#   stale stamp   a changed file keeps its old ?v=, so returning visitors serve
+#                 the cached old copy and the change reaches nobody
+#   stale build   src/app.js was edited but never re-minified, so the old code
+#                 stays live and no hash changed to give it away
+#
+# Neither breaks the page, so neither would be noticed by looking at it. That is
+# why the check hangs off the push instead of relying on memory. CLAUDE.md
+# already says the gate must pass before a deploy; this enforces it.
+#
+# ENABLE IT ONCE PER CLONE (git does not copy hooks, so until you run this the
+# guard silently does not exist):
+#
+#   git config core.hooksPath .githooks
+#
+# Do the same in every site copied from this kit - it is part of first setup.
+#
+# To push past it deliberately: git push --no-verify
+
+if ! node src/assets.js --check; then
+  echo ""
+  echo "  push stopped: run 'node src/assets.js' to restamp, then commit."
+  exit 1
+fi
